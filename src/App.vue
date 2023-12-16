@@ -56,13 +56,12 @@ onBeforeUnmount(() => {
 });
 
 const handleKeydown = (event: KeyboardEvent) => {
-  if (event.shiftKey && event.key === 'Enter') {
+  if (event.ctrlKey && event.key === 'Enter') {
     event.preventDefault();
-    text.value += '\n';
-  } else if (event.key === 'Enter' && !event.shiftKey) {
     submit();
   }
 };
+
 
 </script>
 
