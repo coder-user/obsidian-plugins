@@ -1,0 +1,25 @@
+{
+    "logo": "logo.png",
+    "main": "index.html",
+    "name": "thino",
+    "version": "1.0.0",
+    "pluginName": "thino",
+    "description": "thino obsidian plugin",
+    "author": "coolliuzw",
+    "homepage": "http",
+    "features": [
+        {
+            "code": "thino",
+            "explain": "thino obsidian plugin",
+            "cmds": [
+                "thino",
+                {
+                    "type": "over",
+                    "label": "thino",
+                    "minLength": 1,
+                    "maxLength": 3000
+                }
+            ]
+        }
+    ]
+}
