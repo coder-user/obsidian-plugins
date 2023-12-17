@@ -7,9 +7,9 @@ export interface ThinoData {
 }
 
 export enum ThinoType {
+    FILE = 'FILE',
     DAILY = 'DAILY',
     MULTI = 'MULTI',
-    FILE = 'FILE',
     CANVAS = 'CANVAS'
 }
 
@@ -21,7 +21,9 @@ export const createThinoAsync = async function (
     fallback: () => void = () => {
     }
 ) {
-    data = appendInboxTagIfAbsent(data);
+    if (data.type === ThinoType.FILE) {
+        data = appendInboxTagIfAbsent(data);
+    }
     await axios.post(`http://localhost:${port}/create`, data, {
         headers: {
             'Content-Type': 'application/json'

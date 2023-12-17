@@ -121,10 +121,10 @@ const handleKeydown = (event: KeyboardEvent) => {
 
         </div>
 
-        <div class="group-btn ml-2.5 text-xs leading-8">
+        <!-- <div class="group-btn ml-2.5 text-xs leading-8">
           <span>PORT:</span>
           <input v-model="port" class="w-12">
-        </div>
+        </div> -->
 
       </div>
 
