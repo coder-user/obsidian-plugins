@@ -26,7 +26,9 @@ const submit = async () => {
     text: text.value
   }, port.value, () => {
     success.value = '提交成功';
+    utools.hideMainWindow();
     clear();
+    utools.outPlugin();
   }, () => {
     success.value = '提交失败';
   })
@@ -126,7 +128,7 @@ const handleKeydown = (event: KeyboardEvent) => {
       </div>
 
       <div class="text-right inline-block align-middle">
-        <button class="bg-purple-600 rounded-lg text-white px-8 py-1.5 self-end" @click="submit">提交</button>
+        <button class="bg-purple-600 rounded-lg text-white px-8 py-1.5 self-end" @click="submit">NOTEIT ✍️</button>
       </div>
     </div>
     <span>{{ success }}</span>
