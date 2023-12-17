@@ -36,6 +36,7 @@ const submit = async () => {
 
 const clear = () => {
   text.value = '';
+  type.value = ThinoType.FILE;
   success.value = '';
 }
 
@@ -128,7 +129,7 @@ const handleKeydown = (event: KeyboardEvent) => {
       </div>
 
       <div class="text-right inline-block align-middle">
-        <button class="bg-purple-600 rounded-lg text-white px-8 py-1.5 self-end" @click="submit">NOTEIT ✍️</button>
+        <button class="bg-purple-500 rounded-lg text-white px-8 py-1.5 self-end" @click="submit">NOTEIT ✍️</button>
       </div>
     </div>
     <span>{{ success }}</span>
