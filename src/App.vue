@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from 'vue';
-import { createThinoAsync, ThinoType } from "@/apis/ThinoService";
-import { AlignTextCenterOne, List as List2, ViewGridCard, ViewGridList, ViewList, Write} from "@icon-park/vue-next";
+import { createThinoAsync, ThinoType } from "@/services/ThinoService";
+import { createPushPlusAsync } from "@/services/Pushplus";
+import { Wechat, Home, AlignTextCenterOne, List as List2, ViewGridCard, ViewGridList, ViewList, Write} from "@icon-park/vue-next";
 
 const text = ref('');
 const success = ref('');
@@ -65,6 +66,49 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 };
 
+const sendWechatNotify = async() => {
+  if (text.value.length === 0)
+    return;
+
+  await createPushPlusAsync({
+    title: "memos",
+    content: text.value
+  }, () => {
+    success.value = '提交成功';
+    utools.hideMainWindow();
+    clear();
+    utools.outPlugin();
+  }, () => {
+    success.value = '提交失败';
+  })
+}
+function optimizeAndCopyText() {
+  if (text.value.length === 0)
+    return;
+
+  const selectedText = text.value.trim();
+  let quotedText = selectedText;
+
+  // 检查并替换特定字符串
+  const containsOriginal = /Yealink|yealink|亿联/.test(selectedText);
+  if (containsOriginal) {
+      quotedText = quotedText
+        .replace(/Yealink/g, "Xiaobaidu")
+        .replace(/yealink/g, "xiaobaidu")
+        .replace(/亿联/g, "小百度");
+  }
+
+  // 添加提示信息
+  let prompt = "请使用简洁、清晰的语言帮助我优化以下文本，使其更加明了易懂：\n";
+  quotedText = prompt + "\n" + quotedText;
+
+  text.value = quotedText
+  clear();
+  utools.hideMainWindow();
+  utools.outPlugin();
+  utools.copyText(quotedText);
+  utools.simulateKeyboardTap('v', utools.isMacOS() ? 'command' : 'ctrl');
+}
 
 </script>
 
@@ -118,23 +162,37 @@ const handleKeydown = (event: KeyboardEvent) => {
                   title="MULTI">
             <view-list theme="outline" size="16" fill="#333333" class="sort-btn-icon"/>
           </button>
-
         </div>
-
-        <!-- <div class="group-btn ml-2.5 text-xs leading-8">
-          <span>PORT:</span>
-          <input v-model="port" class="w-12">
-        </div> -->
-
       </div>
 
-      <div class="text-right inline-block align-middle">
-        <button class="bg-purple-500 rounded-lg text-white px-8 py-1.5 self-end" @click="submit">NOTEIT ✍️</button>
+      <div class="inline-flex items-center justify-end">
+        <button @click="optimizeAndCopyText"
+                class="group-btn-text mr-2 py-1.5" 
+                title="Prompt">
+          <write theme="outline" size="16" fill="#333333" class="sort-btn-icon"/>
+        </button>
+        <button @click="sendWechatNotify"
+                class="group-btn-text mr-2 py-1.5" 
+                title="Wechat">
+          <wechat theme="outline" size="16" fill="#333333" class="sort-btn-icon"/>
+        </button>
+        <button @click="optimizeAndCopyText"
+                class="group-btn-text mr-2 py-1.5" 
+                title="MULTI">
+          <view-grid-card theme="outline" size="16" fill="#333333" class="sort-btn-icon"/>
+        </button>
+        <select v-model="selectedOption">
+          <option v-for="option in options" :value="option.value">
+            {{ option.text }}
+          </option>
+        </select>
+        <!-- NOTEIT按钮 -->
+        <button class="bg-purple-500 rounded-lg text-white px-12 py-1.5"
+                @click="submit">✍️</button>
       </div>
     </div>
     <span>{{ success }}</span>
   </div>
-
 </template>
 
 <style scoped>
@@ -152,4 +210,4 @@ const handleKeydown = (event: KeyboardEvent) => {
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
 }
-</style>@/apis/ThinoService
+</style>
